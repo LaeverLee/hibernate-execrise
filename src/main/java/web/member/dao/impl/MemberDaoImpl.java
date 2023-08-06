@@ -1,11 +1,5 @@
 package web.member.dao.impl;
 
-import static core.util.CommonUtil.getConnection;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -16,7 +10,7 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import web.member.dao.MemberDao;
-import web.member.pojo.Member;
+import web.member.entity.Member;
 
 public class MemberDaoImpl implements MemberDao {
 
@@ -66,11 +60,9 @@ public class MemberDaoImpl implements MemberDao {
 	public int update(Member member) {
 		final StringBuilder hql = new StringBuilder()
 			.append("UPDATE Member SET ");
-		int offset = 0;
 		final String password = member.getPassword();
 		if (password != null && !password.isEmpty()) {
 			hql.append("password = :password,");
-			offset = 1;
 		}
 		hql.append("nickname = :nickname,")
 			.append("pass = :pass,")
@@ -84,7 +76,7 @@ public class MemberDaoImpl implements MemberDao {
 			query.setParameter("password", password);
 		}
 		return query
-				.setParameter("nikename", member.getNickname())
+				.setParameter("nickname", member.getNickname())
 				.setParameter("pass", member.getPass())
 				.setParameter("roleId", member.getRoleId())
 				.setParameter("updater", member.getUpdater())
@@ -191,7 +183,7 @@ public class MemberDaoImpl implements MemberDao {
 		Root<Member> root = criteriaQuery.from(Member.class);
 		
 		criteriaQuery.where(
-				criteriaBuilder.equal(root.get("username"), "username")
+				criteriaBuilder.equal(root.get("username"), username)
 				);
 		
 		return session

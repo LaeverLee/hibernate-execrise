@@ -1,6 +1,7 @@
 package app;
 
 
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -14,7 +15,9 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import core.util.HibernateUtil;
-import web.member.pojo.Member;
+import web.emp.entity.Dept;
+import web.emp.entity.Emp;
+import web.member.entity.Member;
 
 public class TestApp {
 	public static void main(String[] args) {
@@ -54,26 +57,49 @@ public class TestApp {
 
 
 
-		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-		CriteriaQuery<Member> criteriaQuery = criteriaBuilder.createQuery(Member.class);
+//		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+//		CriteriaQuery<Member> criteriaQuery = criteriaBuilder.createQuery(Member.class);
+//
+//		//	from MEMBER		
+//		Root<Member> root = criteriaQuery.from(Member.class);
+//		
+//		//	where USERNAME = ? and PASSWORD = ?		
+//		criteriaQuery.where(criteriaBuilder.and(
+//				criteriaBuilder.equal(root.get("username"), "admin"),
+//				criteriaBuilder.equal(root.get("password"), "P@ssW0rd")
+//				));
+//		
+//		//		select USERNAME, NICKNAME
+//		criteriaQuery.multiselect(root.get("username"),root.get("nickname"));
+//		
+//		// order by ID
+//		criteriaQuery.orderBy(criteriaBuilder.asc(root.get("id")));
+//		
+//		Member member = session.createQuery(criteriaQuery).uniqueResult();
+//		System.out.println(member.getNickname());
+		
 
-		//	from MEMBER		
-		Root<Member> root = criteriaQuery.from(Member.class);
 		
-		//	where USERNAME = ? and PASSWORD = ?		
-		criteriaQuery.where(criteriaBuilder.and(
-				criteriaBuilder.equal(root.get("username"), "admin"),
-				criteriaBuilder.equal(root.get("password"), "P@ssW0rd")
-				));
+		// Dept.java / Emp.java / TestApp.java / ch16 
+//		Dept dept = session.get(Dept.class, 30);
+//		var emps = dept.getEmps();
+//		for(var emp :emps) {
+//			System.out.println(emp.getEname());
+//		}(1)
 		
-		//		select USERNAME, NICKNAME
-		criteriaQuery.multiselect(root.get("username"),root.get("nickname"));
+//		Emp emp = session.get(Emp.class, 7369);
+//		Dept dept = emp.getDept();
+//		System.out.println(dept.getDeptno());
+//		System.out.println(dept.getDname());
+//		(2)
 		
-		// order by ID
-		criteriaQuery.orderBy(criteriaBuilder.asc(root.get("id")));
+		Emp emp = session.get(Emp.class, 7369);
+		Dept dept = emp.getDept();
+		List<Emp> emps = dept.getEmps();
+		for(Emp tmp : emps) {
+			System.out.println(tmp.getEname());
+		}//(3)
 		
-		Member member = session.createQuery(criteriaQuery).uniqueResult();
-		System.out.println(member.getNickname());
 	};
 	
 	public Integer insert(Member member) {
